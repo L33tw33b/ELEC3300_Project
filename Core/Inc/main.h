@@ -57,6 +57,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define CS_I2C_SPI_Pin GPIO_PIN_3
+#define CS_I2C_SPI_GPIO_Port GPIOE
+#define OTG_FS_Power_Pin GPIO_PIN_0
+#define OTG_FS_Power_GPIO_Port GPIOC
+#define BOOT1_Pin GPIO_PIN_2
+#define BOOT1_GPIO_Port GPIOB
+#define OTG_FS_OC_Pin GPIO_PIN_5
+#define OTG_FS_OC_GPIO_Port GPIOD
+#define Audio_SDL_Pin GPIO_PIN_6
+#define Audio_SDL_GPIO_Port GPIOB
+#define Audio_SDA_Pin GPIO_PIN_9
+#define Audio_SDA_GPIO_Port GPIOB
+#define MEMS_INT2_Pin GPIO_PIN_1
+#define MEMS_INT2_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
