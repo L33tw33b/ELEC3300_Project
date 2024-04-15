@@ -1,0 +1,11 @@
+../Core/Src/synth.c:31:6:synth_init	16	static
+../Core/Src/synth.c:68:6:set_wave	24	static
+../Core/Src/synth.c:76:6:set_voices	16	static
+../Core/Src/synth.c:148:6:audio_init	8	static
+../Core/Src/synth.c:162:6:synth_all_notes_off	16	static
+../Core/Src/synth.c:170:6:note_on	24	static
+../Core/Src/synth.c:192:6:note_off	24	static
+../Core/Src/synth.c:219:6:update_audio_buffer	56	static
+../Core/Src/synth.c:259:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	8	static
+../Core/Src/synth.c:268:6:BSP_AUDIO_OUT_TransferComplete_CallBack	8	static
+../Core/Src/synth.c:275:6:BSP_AUDIO_OUT_Error_CallBack	8	static

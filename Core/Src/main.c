@@ -25,7 +25,7 @@
 
 #include <math.h>
 #include "midi.h"
-
+#include "synth.h"
 #include "../../Drivers/USBH_midi_class/Inc/usbh_MIDI.h"
 /* USER CODE END Includes */
 
@@ -77,14 +77,7 @@ void MX_USB_HOST_Process(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-float mySinVal;
-float sample_dt;
-uint16_t sample_N;
-uint16_t i_t;
 
-uint32_t myDacVal;
-
-int16_t dataI2S[100];
 /* USER CODE END 0 */
 
 /**
@@ -120,24 +113,9 @@ int main(void)
   MX_I2S3_Init();
   MX_USART2_UART_Init();
   MX_USB_HOST_Init();
+
   /* USER CODE BEGIN 2 */
-/*	CS43_Init(hi2c1, MODE_I2S);
-	CS43_SetVolume(40); //0 - 100,, 40
-	CS43_Enable_RightLeft(CS43_RIGHT_LEFT);
-	CS43_Start();*/
-
-	//Build Sine wave
-/*	for(uint16_t i=0; i<sample_N; i++)
-	{
-		mySinVal = sinf(i*2*PI*sample_dt);
-		dataI2S[i*2] = (mySinVal )*8000;    //Right data (0 2 4 6 8 10 12)
-		dataI2S[i*2 + 1] =(mySinVal )*8000; //Left data  (1 3 5 7 9 11 13)
-	}
-
-	HAL_I2S_Transmit_DMA(&hi2s3, (uint16_t *)dataI2S, sample_N*2);*/
-
-
-
+  synth_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -148,12 +126,11 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
-
     if(last_Appli_state != Appli_state) {
       last_Appli_state = Appli_state;
 
       if(Appli_state == APPLICATION_READY) {
-        start_midi();
+        start_midi(); // Initialize midi controller
       }
 
     }
@@ -334,8 +311,8 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
@@ -394,31 +371,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-/*void USBH_MIDI_ReceiveCallback(USBH_HandleTypeDef *phost)
-{
-	CS43_SetVolume(0);
-}*/
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-//{
-//  /* Prevent unused argument(s) compilation warning */
-//  UNUSED(htim);
-//  /* NOTE : This function Should not be modified, when the callback is needed,
-//            the __HAL_TIM_PeriodElapsedCallback could be implemented in the user file
-//   */
-//
-//	if(htim->Instance == TIM2)
-//	{
-//		mySinVal = sinf(i_t * 2 * PI * sample_dt);
-//		//Convert from float to decimal
-//		myDacVal = (mySinVal + 1)*127;
-//		//Output the sample to the STM DAC
-//		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_8B_R, myDacVal);
-//
-//		i_t++;
-//		if(i_t>= sample_N) i_t = 0;
-//	}
-//
-//}
+
 /* USER CODE END 4 */
 
 /**
