@@ -1,0 +1,2 @@
+../Core/Src/synthutil.c:17:7:pitch_to_freq	16	static
+../Core/Src/synthutil.c:26:17:float2uint16	8	static

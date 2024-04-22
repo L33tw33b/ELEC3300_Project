@@ -7,11 +7,11 @@
 C_SRCS += \
 ../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c 
 
-OBJS += \
-./Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.o 
-
 C_DEPS += \
 ./Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.d 
+
+OBJS += \
+./Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

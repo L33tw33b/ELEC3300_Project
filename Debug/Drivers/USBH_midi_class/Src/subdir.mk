@@ -7,11 +7,11 @@
 C_SRCS += \
 ../Drivers/USBH_midi_class/Src/usbh_MIDI.c 
 
-OBJS += \
-./Drivers/USBH_midi_class/Src/usbh_MIDI.o 
-
 C_DEPS += \
 ./Drivers/USBH_midi_class/Src/usbh_MIDI.d 
+
+OBJS += \
+./Drivers/USBH_midi_class/Src/usbh_MIDI.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

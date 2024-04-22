@@ -1,0 +1,17 @@
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:737:27:USBH_AUDIO_SOFProcess	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:1001:17:USBH_AUDIO_FindLinkedUnit	16	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:341:27:USBH_AUDIO_InterfaceDeInit	16	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:2072:27:USBH_AUDIO_SetControlAttribute	16	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:382:27:USBH_AUDIO_ClassRequest	16	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:195:27:USBH_AUDIO_InterfaceInit	56	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:1856:20:USBH_AUDIO_SetFrequency	20	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:1919:20:USBH_AUDIO_Play	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:1969:20:USBH_AUDIO_Suspend	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:1956:20:USBH_AUDIO_Stop	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:1993:20:USBH_AUDIO_Resume	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:2016:9:USBH_AUDIO_GetOutOffset	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:2039:20:USBH_AUDIO_ChangeOutBuffer	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:2136:20:USBH_AUDIO_SetVolume	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:2185:13:USBH_AUDIO_FrequencySet	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:2196:14:USBH_AUDIO_BufferEmptyCallback	0	static
+../Middlewares/ST/STM32_USB_Host_Library/Class/AUDIO/Src/usbh_audio.c:713:27:USBH_AUDIO_Process	16	static

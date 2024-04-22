@@ -8,13 +8,13 @@ C_SRCS += \
 ../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.c \
 ../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_audio.c 
 
-OBJS += \
-./Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.o \
-./Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_audio.o 
-
 C_DEPS += \
 ./Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.d \
 ./Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_audio.d 
+
+OBJS += \
+./Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.o \
+./Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_audio.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

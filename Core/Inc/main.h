@@ -31,7 +31,9 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "z_displ_ILI9XXX.h"
+#include "z_touch_XPT2046.h"
+#include "z_touch_XPT2046_menu.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -49,6 +51,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -61,8 +65,27 @@ void Error_Handler(void);
 #define CS_I2C_SPI_GPIO_Port GPIOE
 #define OTG_FS_Power_Pin GPIO_PIN_0
 #define OTG_FS_Power_GPIO_Port GPIOC
+#define TOUCH_MISO_Pin GPIO_PIN_2
+#define TOUCH_MISO_GPIO_Port GPIOC
 #define BOOT1_Pin GPIO_PIN_2
 #define BOOT1_GPIO_Port GPIOB
+#define TOUCH_INT_Pin GPIO_PIN_11
+#define TOUCH_INT_GPIO_Port GPIOE
+#define TOUCH_INT_EXTI_IRQn EXTI15_10_IRQn
+#define DISPL_CS_Pin GPIO_PIN_12
+#define DISPL_CS_GPIO_Port GPIOE
+#define TOUCH_CS_Pin GPIO_PIN_13
+#define TOUCH_CS_GPIO_Port GPIOE
+#define DISPL_DC_Pin GPIO_PIN_14
+#define DISPL_DC_GPIO_Port GPIOE
+#define DISPL_RST_Pin GPIO_PIN_15
+#define DISPL_RST_GPIO_Port GPIOE
+#define DISPL_SCK_Pin GPIO_PIN_13
+#define DISPL_SCK_GPIO_Port GPIOB
+#define DISPL_LED_Pin GPIO_PIN_14
+#define DISPL_LED_GPIO_Port GPIOB
+#define DISPL_MOSI_Pin GPIO_PIN_15
+#define DISPL_MOSI_GPIO_Port GPIOB
 #define OTG_FS_OC_Pin GPIO_PIN_5
 #define OTG_FS_OC_GPIO_Port GPIOD
 #define Audio_SDL_Pin GPIO_PIN_6

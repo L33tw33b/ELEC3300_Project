@@ -7,11 +7,11 @@
 C_SRCS += \
 ../Drivers/BSP/Components/cs43l22/cs43l22.c 
 
-OBJS += \
-./Drivers/BSP/Components/cs43l22/cs43l22.o 
-
 C_DEPS += \
 ./Drivers/BSP/Components/cs43l22/cs43l22.d 
+
+OBJS += \
+./Drivers/BSP/Components/cs43l22/cs43l22.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
