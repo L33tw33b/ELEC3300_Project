@@ -1,17 +1,9 @@
-/*
- * z_touch_XPT2046_menu.c
- *
- *  Created on: 13 giu 2022
- *      Author: mauro
- *
- *  licensing: https://github.com/maudeve-it/ILI9XXX-XPT2046-STM32/blob/c097f0e7d569845c1cf98e8d930f2224e427fd54/LICENSE
- *
- */
+
 
 
 
 #include "main.h"
-
+#include "synth.h"
 
 extern int16_t _width;
 extern int16_t _height;
@@ -20,7 +12,7 @@ extern int16_t _height;
 // menus declaration
 #define Menu1Size 5
 sMenuItem Menu1[Menu1Size];
-#define Menu2Size 2
+#define Menu2Size 5
 sMenuItem Menu2[Menu2Size];
 
 
@@ -55,7 +47,7 @@ void InitMenu(){
 		Menu1[k].fontSize=1;
 
 	}
-	strcpy(Menu1[0].Desc,"Item1");
+	strcpy(Menu1[0].Desc,"Wave");
 	strcpy(Menu1[1].Desc,"Item2");
 	strcpy(Menu1[2].Desc,"Item3");
 	strcpy(Menu1[3].Desc,"MENU 2");
@@ -78,8 +70,11 @@ void InitMenu(){
 		Menu2[k].font=Font24;
 		Menu2[k].fontSize=1;
 	}
-	strcpy(Menu2[0].Desc,"Item1");
-	strcpy(Menu2[1].Desc,"BACK");
+	strcpy(Menu2[0].Desc,"Sine On");
+	strcpy(Menu2[1].Desc,"Semi_Sine On");
+	strcpy(Menu2[2].Desc,"Triangle On");
+	strcpy(Menu2[3].Desc,"Square On");
+	strcpy(Menu2[4].Desc,"BACK");
 
 }
 
@@ -150,7 +145,28 @@ uint8_t k,result;
 	return result;
 }
 
+void UpdateMenuItem(sMenuItem menu[], int itemIndex, int isSelected) {
+    if (itemIndex < 0) return; // Basic check to avoid invalid index
 
+    sMenuItem *item = &menu[itemIndex]; // Pointer to the menu item to be updated
+
+    // Determine the colors based on the selection status
+    uint16_t backgroundColor = isSelected ? item->BkgSel : item->BkgUnsel;
+    uint16_t borderColor = isSelected ? item->BorSel : item->BorUnsel;
+    uint16_t textColor = isSelected ? item->InkSel : item->InkUnsel;
+
+    // Draw the rounded rectangle background
+    Displ_fillRoundRect(item->X, item->Y, item->W, item->H, 5, backgroundColor); // Assuming a radius of 5 for rounded corners
+
+    // Draw the border around the item
+    Displ_drawRoundRect(item->X, item->Y, item->W, item->H, 5, borderColor);
+
+    // Draw the text centered within the rectangle
+    uint16_t textWidth = strlen(item->Desc) * item->font.Width * item->fontSize;
+    uint16_t textX = item->X + (item->W - textWidth) / 2;
+    uint16_t textY = item->Y + (item->H - item->font.Height * item->fontSize) / 2;
+    Displ_WString(textX, textY, item->Desc, item->font, item->fontSize, textColor, backgroundColor);
+}
 
 
 
@@ -163,42 +179,56 @@ uint8_t k,result;
  * 		  255		ther was no touch on the menu
  * 		  after any actions repeat menu unless there is a specific "return"
  ******************************************************/
-void RunMenu1(){
-	uint8_t result=0;
-//	uint16_t delay; //delay to add after a touch detection and serving
-//	uint16_t timeTouch; //time of the last touch
+int x = 0;
+int y = 0;
+int z = 0;
+int b = 0;
+extern volatile int menu1_running;
+extern volatile int menu2_running;
 
-//	delay=50;
-	//while (1) {
-		//if (result!=255)
-		//	DrawMenu(Menu1,	(sizeof(Menu1)/sizeof(Menu1[0]))); // TODO: DrawMenu once only
-		result=CheckMenu(Menu1,(sizeof(Menu1)/sizeof(Menu1[0])));
+void RunMenu1(int menu_counter, int button_pressed){
 
-//actions
-		switch (result) {
-		case 0:
-		case 1:
-		case 2:
-			Displ_FillArea(10,10,20,20,GREEN);
-			HAL_Delay(1000);
-			break;
-		case 3:
-			RunMenu2();
-			break;
-		case 4:
-			return;
-			break;
-		case 254: //if touch outside menu items
-			Displ_FillArea(10,10,20,20,ORANGE);
-			HAL_Delay(100);
-			break;
-		case 255: //no touch
-			break;
-		}
-		if (result!=255)
-			__NOP();
 
-	//}
+	 static uint8_t itemSelected[5] = {0}; // Static array to keep track of the selection state
+	    // Loop through all items and update their selection state
+	    for (int i = 0; i < 5; i++) {
+	        if (i == menu_counter) {
+	            if (itemSelected[i] == 0) { // If it is not already selected
+	                UpdateMenuItem(Menu1, i, 1); // Set to selected
+	                itemSelected[i] = 1; // Update the state to selected
+	            }
+	        } else {
+	            if (itemSelected[i] != 0) { // If it is not already unselected
+	                UpdateMenuItem(Menu1, i, 0); // Set to unselected
+	                itemSelected[i] = 0; // Update the state to unselected
+	            }
+	        }
+	    }
+
+	    // Handle special cases like touches outside the menu items
+	    if(button_pressed == 1){
+	    	button_pressed = 0;
+	    	switch (menu_counter) {
+	        	case 0: // Wave
+
+	        		menu2_running = 1;
+	        	    menu1_running = 0;
+	        	    DrawMenu(Menu2,	(sizeof(Menu2)/sizeof(Menu2[0])));
+	        	    itemSelected[0] = 0;
+	        		RunMenu2(0, button_pressed);
+
+	        		break;
+	        	case 1: // Saw Wave
+	        		break;
+	        	case 2: // Triangle Wave
+	        		break;
+	        	case 3: // Square Wave
+	        	default:
+	        		break;
+	    	}
+	    }
+
+
 }
 
 
@@ -216,35 +246,104 @@ void RunMenu1(){
  * 		  255		ther was no touch on the menu
  * 		  after any actions repeat menu unless there is a specific "return"
  ******************************************************/
-void RunMenu2(){
-	uint8_t result=0;
-//	uint16_t delay; //delay to add after a touch detection and serving
-//	uint16_t timeTouch; //time of the last touch
+void RunMenu2(int menu2_counter, int button_pressed){
+	//DrawMenu(Menu2,	(sizeof(Menu2)/sizeof(Menu2[0])));
+	static uint8_t itemSelected[5] = {0}; // Static array to keep track of the selection state
+	    // Loop through all items and update their selection state
+	    for (int i = 0; i < 5; i++) {
+	        if (i == menu2_counter) {
+	            if (itemSelected[i] == 0) { // If it is not already selected
+	                UpdateMenuItem(Menu2, i, 1); // Set to selected
+	                itemSelected[i] = 1; // Update the state to selected
+	            }
+	        } else {
+	            if (itemSelected[i] != 0) { // If it is not already unselected
+	                UpdateMenuItem(Menu2, i, 0); // Set to unselected
+	                itemSelected[i] = 0; // Update the state to unselected
+	            }
+	        }
+	    }
 
-//	delay=50;
-	while (1) {
-		if (result!=255)
-			DrawMenu(Menu2,	(sizeof(Menu2)/sizeof(Menu2[0])));
-		result=CheckMenu(Menu2,(sizeof(Menu2)/sizeof(Menu2[0])));
-		switch (result) {
-		case 0:
-			Displ_FillArea(10,10,20,20,GREEN);
-			HAL_Delay(1000);
-			break;
-		case 1:
-			return;
-			break;
-		case 254: //if touch outside menu items
-			Displ_FillArea(10,10,20,20,MAGENTA);
-			HAL_Delay(100);
-			break;
-		case 255: //no touch
-			break;
-		}
-	}
+	    if(button_pressed == 1){
+
+	    	    	switch (menu2_counter) {
+	    	        	case 0: // Sine Wave
+	    	        		x = x%2;
+	    	        		if(x==0){
+	    	        			strcpy(Menu2[0].Desc,"Sine Off");
+	    	        			UpdateMenuItem(Menu2, 0, 1);
+	    	        			set_wave(0);
+	    	        		}
+	    	        		else{
+	    	        			strcpy(Menu2[0].Desc,"Sine On");
+	    	        			UpdateMenuItem(Menu2, 0, 1);
+	    	        			set_wave(1);
+	    	        		}
+	    	        		x++;
+	    	        		break;
+	    	        	case 1: // Semi_Sine Wave
+	    	        		y = y%2;
+	    	        		if(y==0){
+	    	        			strcpy(Menu2[1].Desc,"Semi_Sine Off");
+	    	        			UpdateMenuItem(Menu2, 1, 1);
+	    	        			set_wave(4);
+	    	        		}
+	    	        		else{
+	    	        			strcpy(Menu2[1].Desc,"Semi_Sine On");
+	    	        			UpdateMenuItem(Menu2, 1, 1);
+	    	        			set_wave(1);
+	    	        		}
+	    	        		y++;
+	    	        		break;
+	    	        	case 2: // Triangle Wave
+	    	        		z = z%2;
+	    	        		if(z==0){
+	    	        			strcpy(Menu2[2].Desc,"Triangle Off");
+	    	        			UpdateMenuItem(Menu2, 2, 1);
+	    	        			set_wave(3);
+	    	        		}
+	    	        		else{
+								strcpy(Menu2[2].Desc,"Triangle On");
+								UpdateMenuItem(Menu2, 2, 1);
+								set_wave(1);
+	    	        		}
+	    	        		z++;
+	    	        		break;
+	    	        	case 3: // Square Wave
+	    	        		b = b%2;
+	    	        		if(b==0){
+	    	        			strcpy(Menu2[3].Desc,"Square Off");
+	    	        			UpdateMenuItem(Menu2, 3, 1);
+	    	        			set_wave(2);
+	    	        		}
+	    	        		else{
+	    	        			strcpy(Menu2[3].Desc,"Square On");
+	    	        			UpdateMenuItem(Menu2, 3, 1);
+	    	        			set_wave(1);
+	    	        		}
+	    	        		b++;
+	    	        		break;
+	    	        	case 4:
+	    	        		menu2_running = 0;
+	    	        	    menu1_running = 1;
+
+	    	        	    DrawMenu(Menu1,	(sizeof(Menu1)/sizeof(Menu1[0])));
+	    	        		RunMenu1(0, 0);
+	    	        		break;
+	    	        	default:
+	    	        		break;
+	    	    	}
+	   }
+
+
 }
 
 // Calls drawmenu in main.c
 void callDrawMenu(){
-	DrawMenu(Menu1,	(sizeof(Menu1)/sizeof(Menu1[0])));
+
+		DrawMenu(Menu1,	(sizeof(Menu1)/sizeof(Menu1[0])));
+
+
+
+
 }

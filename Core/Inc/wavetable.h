@@ -9,6 +9,9 @@
 // wave table that is used to update the audio_buffer
 float sine_wave_table[WAVE_LENGTH];
 float saw_wave_table[WAVE_LENGTH];
+float square_wave_table[WAVE_LENGTH];
+float triangle_wave_table[WAVE_LENGTH];
+float semi_sine_wave_table[WAVE_LENGTH];
 //Implement Square and triangle wave
 
 typedef struct {

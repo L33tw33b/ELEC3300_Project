@@ -57,7 +57,8 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void readEncoder(void);
+void Button_Control();
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -67,6 +68,14 @@ void Error_Handler(void);
 #define OTG_FS_Power_GPIO_Port GPIOC
 #define TOUCH_MISO_Pin GPIO_PIN_2
 #define TOUCH_MISO_GPIO_Port GPIOC
+#define Button_IN_Pin GPIO_PIN_5
+#define Button_IN_GPIO_Port GPIOA
+#define Button_IN_EXTI_IRQn EXTI9_5_IRQn
+#define Rotary_CLK_Pin GPIO_PIN_4
+#define Rotary_CLK_GPIO_Port GPIOC
+#define Rotary_CLK_EXTI_IRQn EXTI4_IRQn
+#define Rotary_DT_Pin GPIO_PIN_5
+#define Rotary_DT_GPIO_Port GPIOC
 #define BOOT1_Pin GPIO_PIN_2
 #define BOOT1_GPIO_Port GPIOB
 #define TOUCH_INT_Pin GPIO_PIN_11

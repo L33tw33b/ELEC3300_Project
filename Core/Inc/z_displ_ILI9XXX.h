@@ -2,8 +2,8 @@
  * 	z_displ_ILI9488.h
  *	rel. TouchGFX.1.30
  *
- *  Created on: 05 giu 2023
- *      Author: mauro
+ *
+ *
  *
  *  licensing: https://github.com/maudeve-it/ILI9XXX-XPT2046-STM32/blob/c097f0e7d569845c1cf98e8d930f2224e427fd54/LICENSE
  *

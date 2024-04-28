@@ -1,7 +1,8 @@
-../Core/Src/z_touch_XPT2046_menu.c:30:6:InitMenu	16	static
-../Core/Src/z_touch_XPT2046_menu.c:96:6:DrawMenuItem	72	static
-../Core/Src/z_touch_XPT2046_menu.c:115:6:DrawMenu	24	static
-../Core/Src/z_touch_XPT2046_menu.c:134:9:CheckMenu	32	static
-../Core/Src/z_touch_XPT2046_menu.c:166:6:RunMenu1	24	static,ignoring_inline_asm
-../Core/Src/z_touch_XPT2046_menu.c:219:6:RunMenu2	24	static
-../Core/Src/z_touch_XPT2046_menu.c:248:6:callDrawMenu	8	static
+../Core/Src/z_touch_XPT2046_menu.c:22:6:InitMenu	16	static
+../Core/Src/z_touch_XPT2046_menu.c:91:6:DrawMenuItem	72	static
+../Core/Src/z_touch_XPT2046_menu.c:110:6:DrawMenu	24	static
+../Core/Src/z_touch_XPT2046_menu.c:129:9:CheckMenu	32	static
+../Core/Src/z_touch_XPT2046_menu.c:148:6:UpdateMenuItem	80	static
+../Core/Src/z_touch_XPT2046_menu.c:189:6:RunMenu1	24	static
+../Core/Src/z_touch_XPT2046_menu.c:249:6:RunMenu2	32	static
+../Core/Src/z_touch_XPT2046_menu.c:342:6:callDrawMenu	8	static

@@ -1,12 +1,4 @@
-/*
- * z_touch_XPT2046_menu.h
- *
- *  Created on: 13 giu 2022
- *      Author: mauro
- *
- *  licensing: https://github.com/maudeve-it/ILI9XXX-XPT2046-STM32/blob/c097f0e7d569845c1cf98e8d930f2224e427fd54/LICENSE
- *
- */
+
 
 #ifndef INC_Z_TOUCH_XPT2046_MENU_H_
 #define INC_Z_TOUCH_XPT2046_MENU_H_
@@ -36,9 +28,10 @@ typedef struct {
 void InitMenu();
 void DrawMenu(sMenuItem *menu,uint8_t menusize);
 uint8_t CheckMenu(sMenuItem *menu,uint8_t menusize);
-void RunMenu2();
-void RunMenu1();
+void RunMenu2(int menu2_counter, int button_pressed);
+void RunMenu1(int menu_counter, int button_pressed);
 void callDrawMenu();
+void UpdateMenuItem(sMenuItem menu[], int itemIndex, int isSelected);
 
 
 

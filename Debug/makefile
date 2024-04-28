@@ -82,8 +82,8 @@ all: main-build
 main-build: ELEC3300_Project.elf secondary-outputs
 
 # Tool invocations
-ELEC3300_Project.elf ELEC3300_Project.map: $(OBJS) $(USER_OBJS) C:\Users\ronal\Desktop\SchoolWork_Archives\SynologyDrive\UST\ELEC3300\ELEC3300_Project\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "ELEC3300_Project.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\ronal\Desktop\SchoolWork_Archives\SynologyDrive\UST\ELEC3300\ELEC3300_Project\STM32F407VGTX_FLASH.ld" -Wl,-Map="ELEC3300_Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+ELEC3300_Project.elf ELEC3300_Project.map: $(OBJS) $(USER_OBJS) C:\Users\James\STM32CubeIDE\workspace_1.9.0\ELEC3300_Project\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "ELEC3300_Project.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\James\STM32CubeIDE\workspace_1.9.0\ELEC3300_Project\STM32F407VGTX_FLASH.ld" -Wl,-Map="ELEC3300_Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

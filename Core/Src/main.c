@@ -88,6 +88,14 @@ void MX_USB_HOST_Process(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int CLKPrevious = 0;
+int refreshLCD = 1;
+int menu_counter = 0;
+int menu2_counter = 0;
+volatile int menu2_running = 0;
+volatile int menu1_running = 1;
+char str[16];
+volatile int button_pressed = 0;
 
 /* USER CODE END 0 */
 
@@ -134,6 +142,10 @@ int main(void)
   Displ_BackLight('I');  					// initialize backlight
   InitMenu();
 
+
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -145,12 +157,15 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
+
+
     if(last_Appli_state != Appli_state) {
       last_Appli_state = Appli_state;
 
       if(Appli_state == APPLICATION_READY) {
         start_midi(); // Initialize midi controller
         callDrawMenu();
+
       }
 
     }
@@ -158,7 +173,16 @@ int main(void)
     	continue;
     	// Don't do RunMenu1() when Appli_state != APPLICATION_READY
     }
-    RunMenu1();
+    if((refreshLCD==1||button_pressed==1)&&menu1_running == 1){
+                	RunMenu1(menu_counter, button_pressed);
+                	button_pressed = 0;
+                	refreshLCD = 0;
+            }
+            else if((refreshLCD==1||button_pressed==1)&&menu2_running == 1){
+            	RunMenu2(menu2_counter, button_pressed);
+            	button_pressed = 0;
+            	refreshLCD = 0;
+            }
   }
   /* USER CODE END 3 */
 }
@@ -488,6 +512,24 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(OTG_FS_Power_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : Button_IN_Pin */
+  GPIO_InitStruct.Pin = Button_IN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Button_IN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Rotary_CLK_Pin */
+  GPIO_InitStruct.Pin = Rotary_CLK_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Rotary_CLK_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Rotary_DT_Pin */
+  GPIO_InitStruct.Pin = Rotary_DT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Rotary_DT_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pin : BOOT1_Pin */
   GPIO_InitStruct.Pin = BOOT1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -536,13 +578,73 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(MEMS_INT2_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+
   HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 
 /* USER CODE BEGIN 4 */
+void readEncoder()
+{
+if(menu1_running ==1){
+    int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+    if (CLKNow != CLKPrevious)
+    {
+        int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+        if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+        {
+            if (menu_counter < 3)
+                menu_counter++;
+            else
+                menu_counter = 0;
+        }
+        else // Encoder is rotating in B direction
+        {
+            if (menu_counter < 1)
+                menu_counter = 3;
+            else
+                menu_counter--;
+        }
+        refreshLCD = 1;
+    }
+    CLKPrevious = CLKNow; // Store last state of CLK
+}
 
+else if (menu2_running ==1){
+	int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+	    if (CLKNow != CLKPrevious)
+	    {
+	        int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+	        if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+	        {
+	            if (menu2_counter < 4)
+	                menu2_counter++;
+	            else
+	                menu2_counter = 0;
+	        }
+	        else // Encoder is rotating in B direction
+	        {
+	            if (menu2_counter < 1)
+	                menu2_counter = 4;
+	            else
+	                menu2_counter--;
+	        }
+	        refreshLCD = 1;
+	    }
+	    CLKPrevious = CLKNow; // Store last state of CLK
+}
+
+}
+
+void Button_Control(){
+	button_pressed = 1;
+}
 /* USER CODE END 4 */
 
 /**

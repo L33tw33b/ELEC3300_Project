@@ -36,7 +36,14 @@ Core/Src/z_touch_XPT2046_menu.o: ../Core/Src/z_touch_XPT2046_menu.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Core/Inc/z_displ_ILI9XXX.h ../Core/Inc/fonts.h \
- ../Core/Inc/z_touch_XPT2046.h ../Core/Inc/z_touch_XPT2046_menu.h
+ ../Core/Inc/z_touch_XPT2046.h ../Core/Inc/z_touch_XPT2046_menu.h \
+ ../Core/Inc/synth.h \
+ ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_audio.h \
+ ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../Components/cs43l22/cs43l22.h \
+ ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../Components/cs43l22/../Common/audio.h \
+ ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h \
+ ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h \
+ ../Core/Inc/wavetable.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -78,3 +85,10 @@ Core/Src/z_touch_XPT2046_menu.o: ../Core/Src/z_touch_XPT2046_menu.c \
 ../Core/Inc/fonts.h:
 ../Core/Inc/z_touch_XPT2046.h:
 ../Core/Inc/z_touch_XPT2046_menu.h:
+../Core/Inc/synth.h:
+../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_audio.h:
+../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../Components/cs43l22/cs43l22.h:
+../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../Components/cs43l22/../Common/audio.h:
+../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h:
+../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h:
+../Core/Inc/wavetable.h:
