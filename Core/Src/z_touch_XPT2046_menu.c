@@ -10,11 +10,12 @@ extern int16_t _height;
 
 
 // menus declaration
-#define Menu1Size 5
+#define Menu1Size 3
 sMenuItem Menu1[Menu1Size];
 #define Menu2Size 5
 sMenuItem Menu2[Menu2Size];
-
+#define Menu3Size 5
+sMenuItem Menu3[Menu3Size];
 
 
 
@@ -48,10 +49,9 @@ void InitMenu(){
 
 	}
 	strcpy(Menu1[0].Desc,"Wave");
-	strcpy(Menu1[1].Desc,"Item2");
-	strcpy(Menu1[2].Desc,"Item3");
-	strcpy(Menu1[3].Desc,"MENU 2");
-	strcpy(Menu1[4].Desc,"EXIT");
+	strcpy(Menu1[1].Desc,"ADSR");
+	strcpy(Menu1[2].Desc,"Scale_ADSR");
+
 
 
 
@@ -75,6 +75,27 @@ void InitMenu(){
 	strcpy(Menu2[2].Desc,"Triangle On");
 	strcpy(Menu2[3].Desc,"Square On");
 	strcpy(Menu2[4].Desc,"BACK");
+
+	for (uint8_t k=0;k<Menu3Size;k++){
+			Menu3[k].X=eGap;
+			Menu3[k].Y=eGap+(2*vBord+vGap+Font24.Height)*k;
+			Menu3[k].W=_width-2*eGap;
+			Menu3[k].H=Font24.Height+2*vBord;
+			Menu3[k].BkgUnsel=DD_BLUE;
+			Menu3[k].BorUnsel=D_CYAN;
+			Menu3[k].InkUnsel=WHITE;
+			Menu3[k].BkgSel=ORANGE;
+			Menu3[k].BorSel=YELLOW;
+			Menu3[k].InkSel=WHITE;
+			Menu3[k].font=Font24;
+			Menu3[k].fontSize=1;
+		}
+		strcpy(Menu3[0].Desc,"Attack");
+		strcpy(Menu3[1].Desc,"Decay");
+		strcpy(Menu3[2].Desc,"Sustain");
+		strcpy(Menu3[3].Desc,"Release");
+		strcpy(Menu3[4].Desc,"BACK");
+
 
 }
 
@@ -185,13 +206,23 @@ int z = 0;
 int b = 0;
 extern volatile int menu1_running;
 extern volatile int menu2_running;
-
+extern volatile int menu3_running;
+extern volatile int Attack_running;
+extern volatile int Decay_running;
+extern volatile int Sustain_running;
+extern volatile int Release_running;
+extern volatile int Scale_running;
+extern volatile int Scale_counter;
+extern volatile int SCL_BACK;
+extern volatile int menu_counter;
+extern volatile int menu2_counter;
+extern volatile int menu3_counter;
 void RunMenu1(int menu_counter, int button_pressed){
 
 
-	 static uint8_t itemSelected[5] = {0}; // Static array to keep track of the selection state
+	 static uint8_t itemSelected[3] = {0}; // Static array to keep track of the selection state
 	    // Loop through all items and update their selection state
-	    for (int i = 0; i < 5; i++) {
+	    for (int i = 0; i < 3; i++) {
 	        if (i == menu_counter) {
 	            if (itemSelected[i] == 0) { // If it is not already selected
 	                UpdateMenuItem(Menu1, i, 1); // Set to selected
@@ -208,21 +239,42 @@ void RunMenu1(int menu_counter, int button_pressed){
 	    // Handle special cases like touches outside the menu items
 	    if(button_pressed == 1){
 	    	button_pressed = 0;
+	    	char str[16];
 	    	switch (menu_counter) {
 	        	case 0: // Wave
 
 	        		menu2_running = 1;
 	        	    menu1_running = 0;
-	        	    DrawMenu(Menu2,	(sizeof(Menu2)/sizeof(Menu2[0])));
+	        	    menu2_counter = 0;
 	        	    itemSelected[0] = 0;
-	        		RunMenu2(0, button_pressed);
+	        	    DrawMenu(Menu2,	(sizeof(Menu2)/sizeof(Menu2[0])));
+	        		RunMenu2(menu2_counter, button_pressed);
 
 	        		break;
-	        	case 1: // Saw Wave
+	        	case 1: // ADSR
+	        		menu3_running = 1;
+	        		menu1_running = 0;
+	        		menu3_counter = 0;
+	        		DrawMenu(Menu3,	(sizeof(Menu3)/sizeof(Menu3[0])));
+	        		RunMenu3(menu3_counter, button_pressed);
 	        		break;
-	        	case 2: // Triangle Wave
-	        		break;
-	        	case 3: // Square Wave
+	        	case 2: //Scale_ADSR
+	        		Scale_running = 1;
+	        		while(SCL_BACK == 0){
+	        		if(Scale_counter==10){
+	        			strcpy(Menu1[2].Desc,"SCL: 1.0");
+	        		}
+	        		else{
+	        			sprintf(str, "SCL: 0.%d", Scale_counter);
+	        			strcpy(Menu1[2].Desc,str);
+	        		}
+	        			UpdateMenuItem(Menu1, 2, 1);
+	        			HAL_Delay(50);
+	        		}
+	        		float SCL = Scale_counter/10.0;
+	        		set_scale(SCL);
+	        		SCL_BACK = 0;
+	        		Scale_running = 0;
 	        	default:
 	        		break;
 	    	}
@@ -326,9 +378,9 @@ void RunMenu2(int menu2_counter, int button_pressed){
 	    	        	case 4:
 	    	        		menu2_running = 0;
 	    	        	    menu1_running = 1;
-
+	    	        	    menu_counter = 0;
 	    	        	    DrawMenu(Menu1,	(sizeof(Menu1)/sizeof(Menu1[0])));
-	    	        		RunMenu1(0, 0);
+	    	        		RunMenu1(menu_counter, 0);
 	    	        		break;
 	    	        	default:
 	    	        		break;
@@ -337,12 +389,139 @@ void RunMenu2(int menu2_counter, int button_pressed){
 
 
 }
+extern volatile int ATT_BACK;
+extern volatile int Attack_counter;
+extern volatile int DEC_BACK;
+extern volatile int Decay_counter;
+extern volatile int SUS_BACK;
+extern volatile int Sustain_counter;
+extern volatile int REL_BACK;
+extern volatile int Release_counter;
+void RunMenu3(int menu3_counter, int button_pressed){
+
+
+	 static uint8_t itemSelected[5] = {0}; // Static array to keep track of the selection state
+	    // Loop through all items and update their selection state
+	    for (int i = 0; i < 5; i++) {
+	        if (i == menu3_counter) {
+	            if (itemSelected[i] == 0) { // If it is not already selected
+	                UpdateMenuItem(Menu3, i, 1); // Set to selected
+	                itemSelected[i] = 1; // Update the state to selected
+	            }
+	        } else {
+	            if (itemSelected[i] != 0) { // If it is not already unselected
+	                UpdateMenuItem(Menu3, i, 0); // Set to unselected
+	                itemSelected[i] = 0; // Update the state to unselected
+	            }
+	        }
+	    }
+
+	    // Handle special cases like touches outside the menu items
+	    if(button_pressed == 1){
+	    	button_pressed = 0;
+	    	char str[16];
+
+	    	switch (menu3_counter) {
+	        	case 0: // Attack
+	        		Attack_running = 1;
+	        		while(ATT_BACK == 0){
+	        			if(Attack_counter==10){
+	        				strcpy(Menu3[0].Desc,"ATT: 1.0");
+	        			}
+	        			else{
+	        				sprintf(str, "ATT: 0.%d", Attack_counter);
+	        				strcpy(Menu3[0].Desc,str);
+	        			}
+	        			UpdateMenuItem(Menu3, 0, 1);
+	        			HAL_Delay(50);
+	        		}
+	        		float ATT = Attack_counter/10.0;
+	        		set_attack(ATT);
+	        		ATT_BACK = 0;
+	        		Attack_running = 0;
+
+	        		break;
+	        	case 1: // Decay
+	        		Decay_running = 1;
+	        		while(DEC_BACK == 0){
+	        			if(Decay_counter==10){
+	        				strcpy(Menu3[1].Desc,"DEC: 1.0");
+	        			}
+	        			else{
+	        				sprintf(str, "DEC: 0.%d", Decay_counter);
+	        				strcpy(Menu3[1].Desc,str);
+	        			}
+	        			UpdateMenuItem(Menu3, 1, 1);
+	        			HAL_Delay(50);
+	        		}
+	        		float DEC = Decay_counter/10.0;
+	        		set_decay(DEC);
+	        		DEC_BACK = 0;
+	        		Decay_running = 0;
+	        		break;
+	        	case 2: //Sustain
+	        		Sustain_running = 1;
+	        		while(SUS_BACK == 0){
+	        			if(Sustain_counter==10){
+	        				strcpy(Menu3[2].Desc,"SUS: 1.0");
+	        			}
+	        			else{
+	        				sprintf(str, "SUS: 0.%d", Sustain_counter);
+	        				strcpy(Menu3[2].Desc,str);
+	        			}
+	        			UpdateMenuItem(Menu3, 2, 1);
+	        			HAL_Delay(50);
+	        		}
+	        		float SUS = Sustain_counter/10.0;
+	        		set_sustain(SUS);
+	        		SUS_BACK = 0;
+	        		Sustain_running = 0;
+	        		break;
+	        	case 3: //Release
+	        		Release_running = 1;
+	        		while(REL_BACK == 0){
+	        			if(Release_counter==10){
+	        				strcpy(Menu3[3].Desc,"REL: 1.0");
+	        			}
+	        			else{
+	        				sprintf(str, "REL: 0.%d", Release_counter);
+	        				strcpy(Menu3[3].Desc,str);
+	        			}
+	        			UpdateMenuItem(Menu3, 3, 1);
+	        			HAL_Delay(50);
+	        		}
+	        		float REL = Release_counter/10.0;
+	        		set_release(REL);
+	        		REL_BACK = 0;
+	        		Release_running = 0;
+	        		break;
+	        	case 4:
+	        		menu3_running = 0;
+	        		menu1_running = 1;
+	        		menu_counter = 0;
+	        	    DrawMenu(Menu1,	(sizeof(Menu1)/sizeof(Menu1[0])));
+	        	    RunMenu1(menu_counter, 0);
+	        		break;
+	        	default:
+	        		break;
+	    	}
+
+	    }
+
+
+}
 
 // Calls drawmenu in main.c
-void callDrawMenu(){
-
+void callDrawMenu(int menu){
+	if(menu == 1){
 		DrawMenu(Menu1,	(sizeof(Menu1)/sizeof(Menu1[0])));
-
+	}
+	else if(menu == 2){
+		DrawMenu(Menu2,	(sizeof(Menu2)/sizeof(Menu2[0])));
+	}
+	else if(menu == 3){
+			DrawMenu(Menu3,	(sizeof(Menu3)/sizeof(Menu3[0])));
+	}
 
 
 

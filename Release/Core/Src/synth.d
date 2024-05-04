@@ -40,7 +40,8 @@ Core/Src/synth.o: ../Core/Src/synth.c ../Core/Inc/synth.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h \
- ../Core/Inc/wavetable.h ../Core/Inc/synthutil.h ../Core/Inc/main.h \
+ ../Core/Inc/wavetable.h ../Core/Inc/adsr.h ../Core/Inc/biquad.h \
+ ../Core/Inc/snd.h ../Core/Inc/synthutil.h ../Core/Inc/main.h \
  ../Core/Inc/z_displ_ILI9XXX.h ../Core/Inc/fonts.h \
  ../Core/Inc/z_touch_XPT2046.h ../Core/Inc/z_touch_XPT2046_menu.h \
  ../Core/Src/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_audio.h
@@ -87,6 +88,9 @@ Core/Src/synth.o: ../Core/Src/synth.c ../Core/Inc/synth.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h:
 ../Core/Inc/wavetable.h:
+../Core/Inc/adsr.h:
+../Core/Inc/biquad.h:
+../Core/Inc/snd.h:
 ../Core/Inc/synthutil.h:
 ../Core/Inc/main.h:
 ../Core/Inc/z_displ_ILI9XXX.h:

@@ -43,7 +43,8 @@ Core/Src/z_touch_XPT2046_menu.o: ../Core/Src/z_touch_XPT2046_menu.c \
  ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../Components/cs43l22/../Common/audio.h \
  ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h \
  ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h \
- ../Core/Inc/wavetable.h
+ ../Core/Inc/wavetable.h ../Core/Inc/adsr.h ../Core/Inc/biquad.h \
+ ../Core/Inc/snd.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -92,3 +93,6 @@ Core/Src/z_touch_XPT2046_menu.o: ../Core/Src/z_touch_XPT2046_menu.c \
 ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h:
 ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h:
 ../Core/Inc/wavetable.h:
+../Core/Inc/adsr.h:
+../Core/Inc/biquad.h:
+../Core/Inc/snd.h:

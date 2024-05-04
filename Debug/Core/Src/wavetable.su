@@ -6,4 +6,4 @@
 ../Core/Src/wavetable.c:92:6:wavetable_init	16	static
 ../Core/Src/wavetable.c:110:6:wavetable_note_on	16	static
 ../Core/Src/wavetable.c:119:6:wavetable_note_off	16	static
-../Core/Src/wavetable.c:128:6:wavetable_get_samples	32	static
+../Core/Src/wavetable.c:129:6:wavetable_get_samples	32	static

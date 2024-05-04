@@ -30,7 +30,8 @@ void DrawMenu(sMenuItem *menu,uint8_t menusize);
 uint8_t CheckMenu(sMenuItem *menu,uint8_t menusize);
 void RunMenu2(int menu2_counter, int button_pressed);
 void RunMenu1(int menu_counter, int button_pressed);
-void callDrawMenu();
+void RunMenu3(int menu3_counter, int button_pressed);
+void callDrawMenu(int menu);
 void UpdateMenuItem(sMenuItem menu[], int itemIndex, int isSelected);
 
 

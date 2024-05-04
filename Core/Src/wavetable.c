@@ -121,6 +121,7 @@ void wavetable_note_off(wavetable_state_t *self)
   self->phase     = 0;
   self->pitch     = 0;
   self->pitch_hz  = pitch_to_freq(32);
+  self->pitch_hz  = 0;
   self->phase_inc = (self->pitch_hz / FRAME_RATE) * WAVE_LENGTH;
 }
 

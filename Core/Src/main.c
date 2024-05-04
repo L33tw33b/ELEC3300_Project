@@ -90,13 +90,29 @@ void MX_USB_HOST_Process(void);
 /* USER CODE BEGIN 0 */
 int CLKPrevious = 0;
 int refreshLCD = 1;
-int menu_counter = 0;
-int menu2_counter = 0;
+volatile int menu_counter = 0;
+volatile int menu2_counter = 0;
+volatile int menu3_counter = 0;
+volatile int Attack_counter = 0;
+volatile int Decay_counter = 0;
+volatile int Sustain_counter = 0;
+volatile int Release_counter = 0;
+volatile int Scale_counter = 0;
 volatile int menu2_running = 0;
 volatile int menu1_running = 1;
+volatile int menu3_running = 0;
+volatile int Attack_running = 0;
+volatile int Decay_running = 0;
+volatile int Sustain_running = 0;
+volatile int Release_running = 0;
+volatile int Scale_running = 0;
 char str[16];
 volatile int button_pressed = 0;
-
+volatile int ATT_BACK = 0;
+volatile int DEC_BACK = 0;
+volatile int SUS_BACK = 0;
+volatile int REL_BACK = 0;
+volatile int SCL_BACK = 0;
 /* USER CODE END 0 */
 
 /**
@@ -153,6 +169,8 @@ int main(void)
   while (1)
   {
 
+
+
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
@@ -164,7 +182,7 @@ int main(void)
 
       if(Appli_state == APPLICATION_READY) {
         start_midi(); // Initialize midi controller
-        callDrawMenu();
+        callDrawMenu(1);
 
       }
 
@@ -173,6 +191,7 @@ int main(void)
     	continue;
     	// Don't do RunMenu1() when Appli_state != APPLICATION_READY
     }
+
     if((refreshLCD==1||button_pressed==1)&&menu1_running == 1){
                 	RunMenu1(menu_counter, button_pressed);
                 	button_pressed = 0;
@@ -183,6 +202,14 @@ int main(void)
             	button_pressed = 0;
             	refreshLCD = 0;
             }
+            else if((refreshLCD==1||button_pressed==1)&&menu3_running == 1){
+
+
+                       	RunMenu3(menu3_counter, button_pressed);
+                       	button_pressed = 0;
+                       	refreshLCD = 0;
+            }
+
   }
   /* USER CODE END 3 */
 }
@@ -593,27 +620,52 @@ static void MX_GPIO_Init(void)
 void readEncoder()
 {
 if(menu1_running ==1){
-    int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
-    if (CLKNow != CLKPrevious)
-    {
-        int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
-        if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
-        {
-            if (menu_counter < 3)
-                menu_counter++;
-            else
-                menu_counter = 0;
-        }
-        else // Encoder is rotating in B direction
-        {
-            if (menu_counter < 1)
-                menu_counter = 3;
-            else
-                menu_counter--;
-        }
-        refreshLCD = 1;
-    }
-    CLKPrevious = CLKNow; // Store last state of CLK
+	if(Scale_running==0){
+		int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+		if (CLKNow != CLKPrevious)
+		{
+			int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+			if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+			{
+				if (menu_counter < 2)
+					menu_counter++;
+				else
+					menu_counter = 0;
+			}
+			else // Encoder is rotating in B direction
+			{
+				if (menu_counter < 1)
+					menu_counter = 2;
+				else
+					menu_counter--;
+			}
+			refreshLCD = 1;
+		}
+		CLKPrevious = CLKNow; // Store last state of CLK
+	}
+	else if(Scale_running==1){
+		int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+				if (CLKNow != CLKPrevious)
+				{
+					int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+					if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+					{
+						if (Scale_counter < 10)
+							Scale_counter++;
+						else
+							Scale_counter = 0;
+					}
+					else // Encoder is rotating in B direction
+					{
+						if (Scale_counter < 1)
+							Scale_counter = 10;
+						else
+							Scale_counter--;
+					}
+					refreshLCD = 1;
+				}
+				CLKPrevious = CLKNow; // Store last state of CLK
+	}
 }
 
 else if (menu2_running ==1){
@@ -639,11 +691,142 @@ else if (menu2_running ==1){
 	    }
 	    CLKPrevious = CLKNow; // Store last state of CLK
 }
-
+else if (menu3_running ==1){
+	if(Attack_running == 0 && Decay_running == 0 && Sustain_running == 0 && Release_running == 0){
+			int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+	    	if (CLKNow != CLKPrevious)
+	    	{
+	    		int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+	    		if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+	    		{
+	    			if (menu3_counter < 4)
+	    				menu3_counter++;
+	    			else
+	    				menu3_counter = 0;
+	    		}
+	    		else // Encoder is rotating in B direction
+	    		{
+	    			if (menu3_counter < 1)
+	    				menu3_counter = 4;
+	    			else
+	    				menu3_counter--;
+	    		}
+	    		refreshLCD = 1;
+	    	}
+	    CLKPrevious = CLKNow; // Store last state of CLK
+	}
+	else if(Attack_running == 1){
+		int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+			    	if (CLKNow != CLKPrevious)
+			    	{
+			    		int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+			    		if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+			    		{
+			    			if (Attack_counter < 10)
+			    				Attack_counter++;
+			    			else
+			    				Attack_counter = 0;
+			    		}
+			    		else // Encoder is rotating in B direction
+			    		{
+			    			if (Attack_counter < 1)
+			    				Attack_counter = 10;
+			    			else
+			    				Attack_counter--;
+			    		}
+			    		refreshLCD = 1;
+			    	}
+			    CLKPrevious = CLKNow; // Store last state of CLK
+	}
+	else if(Decay_running == 1){
+		int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+					    	if (CLKNow != CLKPrevious)
+					    	{
+					    		int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+					    		if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+					    		{
+					    			if (Decay_counter < 10)
+					    				Decay_counter++;
+					    			else
+					    				Decay_counter = 0;
+					    		}
+					    		else // Encoder is rotating in B direction
+					    		{
+					    			if (Decay_counter < 1)
+					    				Decay_counter = 10;
+					    			else
+					    				Decay_counter--;
+					    		}
+					    		refreshLCD = 1;
+					    	}
+					    CLKPrevious = CLKNow; // Store last state of CLK
+	}
+	else if(Sustain_running == 1){
+		int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+					    	if (CLKNow != CLKPrevious)
+					    	{
+					    		int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+					    		if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+					    		{
+					    			if (Sustain_counter < 10)
+					    				Sustain_counter++;
+					    			else
+					    				Sustain_counter = 0;
+					    		}
+					    		else // Encoder is rotating in B direction
+					    		{
+					    			if (Sustain_counter < 1)
+					    				Sustain_counter = 10;
+					    			else
+					    				Sustain_counter--;
+					    		}
+					    		refreshLCD = 1;
+					    	}
+					    CLKPrevious = CLKNow; // Store last state of CLK
+	}
+	else if(Release_running == 1){
+		int CLKNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4); // Read the state of the CLK pin
+							    	if (CLKNow != CLKPrevious)
+							    	{
+							    		int DTNow = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5); // Read the state of the DT pin
+							    		if (DTNow != CLKNow) // If DT state is different from CLK state, encoder is rotating in A direction
+							    		{
+							    			if (Release_counter < 10)
+							    				Release_counter++;
+							    			else
+							    				Release_counter = 0;
+							    		}
+							    		else // Encoder is rotating in B direction
+							    		{
+							    			if (Release_counter < 1)
+							    				Release_counter = 10;
+							    			else
+							    				Release_counter--;
+							    		}
+							    		refreshLCD = 1;
+							    	}
+							    CLKPrevious = CLKNow; // Store last state of CLK
+	}
+}
 }
 
 void Button_Control(){
 	button_pressed = 1;
+	if(Attack_running ==1){
+		ATT_BACK = 1;
+	}
+	if(Decay_running ==1){
+			DEC_BACK = 1;
+	}
+	if(Sustain_running ==1){
+			SUS_BACK = 1;
+	}
+	if(Release_running ==1){
+			REL_BACK = 1;
+	}
+	if(Scale_running ==1){
+			SCL_BACK = 1;
+	}
 }
 /* USER CODE END 4 */
 

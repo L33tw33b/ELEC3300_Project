@@ -53,7 +53,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../Components/cs43l22/../Common/audio.h \
  ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h \
  ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h \
- ../Core/Inc/wavetable.h \
+ ../Core/Inc/wavetable.h ../Core/Inc/adsr.h ../Core/Inc/biquad.h \
+ ../Core/Inc/snd.h \
  ../Core/Src/../../Drivers/USBH_midi_class/Inc/usbh_MIDI.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -114,4 +115,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h:
 ../Core/Inc/../../Drivers/BSP/STM32F4-Discovery/../../../Middlewares/ST/STM32_Audio/Addons/PDM/Inc/pdm2pcm_glo.h:
 ../Core/Inc/wavetable.h:
+../Core/Inc/adsr.h:
+../Core/Inc/biquad.h:
+../Core/Inc/snd.h:
 ../Core/Src/../../Drivers/USBH_midi_class/Inc/usbh_MIDI.h:
